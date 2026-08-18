@@ -1,115 +1,538 @@
-/* =========================================
-   PAINEL DE CONTROLE DE CORES E DESIGN
-   Mude os códigos hexadecimais (#) aqui!
-========================================= */
+/* ============================================================
+   HINÁRIO DIGITAL — style.css
+   ------------------------------------------------------------
+   COMO TROCAR A COR DO APP (ex: de Azul para Vermelho):
+   Basta editar as 3 variáveis marcadas com ⭐ dentro do :root.
+   Todo o resto do app (botões, barra, cards, ícones) muda
+   automaticamente porque tudo usa var(--...).
+   ============================================================ */
+
 :root {
-    --cor-fundo: #0f172a;        /* Cor de fundo do app (Azul bem escuro) */
-    --cor-texto: #f8fafc;        /* Cor das letras principais (Branco gelo) */
-    --cor-primaria: #3b82f6;     /* Cor de destaque (Azul moderno) */
-    --cor-secundaria: #1e293b;   /* Cor dos cartões (Azul escuro acinzentado) */
-    --cor-barra-inferior: #020617; /* Fundo da barra de navegação */
-    --borda-arredondada: 16px;   /* O quanto os botões são redondos */
+  /* ⭐ 1. COR PRINCIPAL (barra superior, botões, destaques) */
+  --color-primary: #16213e;
+  /* ⭐ 2. COR DE DESTAQUE / DOURADO (favoritos, badges, links ativos) */
+  --color-accent: #d4a85a;
+  /* ⭐ 3. COR DE FUNDO GERAL (modo claro) */
+  --color-bg: #f7f3ea;
+
+  /* Tons derivados — normalmente não precisa tocar */
+  --color-primary-dark: #0f1626;
+  --color-accent-soft: #e9d3a3;
+  --color-surface: #ffffff;
+  --color-surface-2: #fffaf0;
+  --color-text: #241f1a;
+  --color-text-soft: #6b6255;
+  --color-border: rgba(22, 33, 62, 0.08);
+  --color-danger: #c0483f;
+
+  --radius-lg: 24px;
+  --radius-md: 18px;
+  --radius-sm: 12px;
+
+  --shadow-soft: 0 10px 30px rgba(22, 33, 62, 0.12);
+  --shadow-deep: 0 20px 45px rgba(22, 33, 62, 0.18);
+
+  --font-display: "Fraunces", "Iowan Old Style", "Georgia", serif;
+  --font-body: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+
+  --reading-font-size: 19px;
+
+  --nav-height: 78px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  color-scheme: light;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+/* ---------------- MODO ESCURO ---------------- */
+[data-theme="dark"] {
+  --color-bg: #0f1626;
+  --color-surface: #182338;
+  --color-surface-2: #1e2c48;
+  --color-text: #f1ece0;
+  --color-text-soft: #a9a4c2;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.45);
+  --shadow-deep: 0 20px 45px rgba(0, 0, 0, 0.55);
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  transition: background 0.35s ease, color 0.35s ease;
+  overscroll-behavior-y: contain;
+}
 
 body {
-    background-color: var(--cor-fundo);
-    color: var(--cor-texto);
-    padding-bottom: 80px; /* Espaço para a barra inferior */
+  min-height: 100vh;
+  padding-bottom: calc(var(--nav-height) + var(--safe-bottom));
 }
 
-header {
-    background-color: var(--cor-primaria);
-    padding: 20px;
-    text-align: center;
-    font-size: 1.2rem;
-    font-weight: bold;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  margin: 0;
+  letter-spacing: -0.01em;
 }
 
-main { padding: 20px; }
-
-/* Sistema de Telas */
-.tela { display: none; }
-.tela.ativa { display: block; animation: fadeIn 0.3s ease; }
-
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-/* Grid de Ministérios */
-.grid-ministerios {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Duas colunas perfeitas pro celular */
-    gap: 15px;
+button {
+  font-family: var(--font-body);
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: inherit;
 }
 
-.card-ministerio {
-    background-color: var(--cor-secundaria);
-    border-radius: var(--borda-arredondada);
-    overflow: hidden;
-    position: relative;
-    height: 140px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+/* ---------------- CABEÇALHO ---------------- */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: linear-gradient(160deg, var(--color-primary), var(--color-primary-dark));
+  color: #fdfaf3;
+  padding: 18px 20px 22px;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  box-shadow: var(--shadow-deep);
 }
 
-.card-ministerio img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.6; /* Deixa a imagem mais escura pro texto aparecer */
-    transition: 0.3s;
+.app-header .eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent-soft);
+  opacity: 0.9;
 }
 
-.card-ministerio:active img { opacity: 0.3; }
-
-.card-titulo {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+.app-header h1 {
+  font-size: 26px;
+  margin-top: 4px;
 }
 
-/* Cartões de Hinos e Avisos */
-.item-card {
-    background-color: var(--cor-secundaria);
-    border-radius: var(--borda-arredondada);
-    padding: 20px;
-    margin-bottom: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-.item-card h3 { color: var(--cor-primaria); margin-bottom: 10px; font-size: 1.3rem; }
-.item-card pre { white-space: pre-wrap; font-family: inherit; font-size: 1.05rem; line-height: 1.6; }
-
-/* Botões */
-.btn-voltar {
-    background-color: var(--cor-secundaria);
-    color: var(--cor-texto);
-    border: 1px solid var(--cor-primaria);
-    padding: 10px 20px;
-    border-radius: var(--borda-arredondada);
-    margin-bottom: 20px;
-    font-size: 1rem;
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fdfaf3;
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+.icon-btn:active {
+  transform: scale(0.88);
+  background: rgba(255, 255, 255, 0.22);
 }
 
-/* Barra de Navegação Inferior */
+/* ---------------- BUSCA ---------------- */
+.search-wrap {
+  margin-top: 16px;
+  position: relative;
+}
+.search-wrap input {
+  width: 100%;
+  padding: 14px 16px 14px 44px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fdfaf3;
+  font-size: 15px;
+  outline: none;
+}
+.search-wrap input::placeholder {
+  color: rgba(253, 250, 243, 0.65);
+}
+.search-wrap svg {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.7;
+}
+
+/* ---------------- CONTEÚDO / TELAS ---------------- */
+.screen {
+  padding: 20px 20px 12px;
+  animation: fadeSlideIn 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.screen.hidden {
+  display: none;
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.section-title {
+  font-size: 15px;
+  color: var(--color-text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 22px 4px 12px;
+}
+
+/* ---------------- GRID DE MINISTÉRIOS (HOME) ---------------- */
+.ministry-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.ministry-card {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  min-height: 118px;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  color: #fff;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.18s ease;
+}
+.ministry-card:active {
+  transform: scale(0.96);
+}
+.ministry-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(200deg, rgba(0,0,0,0.15), rgba(0,0,0,0.65));
+  z-index: 0;
+}
+.ministry-card > * {
+  position: relative;
+  z-index: 1;
+}
+.ministry-card .m-icon {
+  font-size: 22px;
+  margin-bottom: 6px;
+}
+.ministry-card .m-name {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+}
+.ministry-card .m-count {
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+/* Placeholder de imagem: onde você troca a foto de cada card */
+.ministry-card.harpa      { background-image: url("/* COLOQUE_O_LINK_DA_IMAGEM_HARPA_CRISTA_AQUI */"), linear-gradient(160deg, #2a3a63, #16213e); }
+.ministry-card.senhoras   { background-image: url("/* COLOQUE_O_LINK_DA_IMAGEM_SENHORAS_AQUI */"), linear-gradient(160deg, #6d3b5c, #3a2038); }
+.ministry-card.jovens     { background-image: url("/* COLOQUE_O_LINK_DA_IMAGEM_JOVENS_AQUI */"), linear-gradient(160deg, #1f6e5c, #123a30); }
+.ministry-card.adolescentes { background-image: url("/* COLOQUE_O_LINK_DA_IMAGEM_ADOLESCENTES_AQUI */"), linear-gradient(160deg, #a06a1d, #5c3c10); }
+.ministry-card.criancas   { background-image: url("/* COLOQUE_O_LINK_DA_IMAGEM_CRIANCAS_AQUI */"), linear-gradient(160deg, #2f7dab, #163a52); }
+.ministry-card.favoritos  { background-image: url("/* COLOQUE_O_LINK_DA_IMAGEM_FAVORITOS_AQUI (opcional) */"), linear-gradient(160deg, #b0473f, #5c1f1a); }
+
+/* ---------------- LISTA DE HINOS ---------------- */
+.hymn-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hymn-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.12s ease;
+}
+.hymn-row:active {
+  transform: scale(0.985);
+}
+
+.hymn-number {
+  min-width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(160deg, var(--color-accent), var(--color-accent-soft));
+  color: var(--color-primary-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.hymn-info {
+  flex: 1;
+  min-width: 0;
+}
+.hymn-info .t {
+  font-weight: 600;
+  font-size: 15.5px;
+}
+.hymn-info .sub {
+  font-size: 12.5px;
+  color: var(--color-text-soft);
+}
+
+.fav-toggle {
+  font-size: 19px;
+  color: var(--color-text-soft);
+  padding: 6px;
+  transition: transform 0.18s ease;
+}
+.fav-toggle.active {
+  color: var(--color-danger);
+}
+.fav-toggle:active {
+  transform: scale(1.3);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--color-text-soft);
+}
+.empty-state .big {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+/* ---------------- TELA DE LEITURA DO HINO ---------------- */
+.hymn-reader {
+  position: fixed;
+  inset: 0;
+  background: var(--color-bg);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(100%);
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.hymn-reader.open {
+  transform: translateY(0);
+}
+
+.reader-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 16px 12px;
+  background: var(--color-primary);
+  color: #fdfaf3;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  box-shadow: var(--shadow-deep);
+}
+.reader-toolbar .title {
+  flex: 1;
+  min-width: 0;
+}
+.reader-toolbar .title .num {
+  font-size: 11px;
+  color: var(--color-accent-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.reader-toolbar .title h2 {
+  font-size: 17px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.font-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.14);
+  font-weight: 700;
+  font-size: 14px;
+}
+.font-btn:active {
+  background: rgba(255,255,255,0.28);
+}
+
+.reader-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 22px 40px;
+}
+.reader-body .verse {
+  font-family: var(--font-display);
+  font-size: var(--reading-font-size);
+  line-height: 1.75;
+  margin-bottom: 26px;
+  white-space: pre-line;
+}
+.reader-body .chorus {
+  font-style: italic;
+  color: var(--color-text-soft);
+  border-left: 3px solid var(--color-accent);
+  padding-left: 14px;
+}
+.reader-body .placeholder-note {
+  background: var(--color-surface-2);
+  border: 1px dashed var(--color-accent);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  color: var(--color-text-soft);
+}
+
+/* ---------------- AVISOS ---------------- */
+.aviso-card {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+  margin-bottom: 16px;
+}
+.aviso-banner {
+  height: 140px;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--color-primary);
+}
+.aviso-body {
+  padding: 16px 18px 18px;
+}
+.aviso-body .date {
+  font-size: 11.5px;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+}
+.aviso-body h3 {
+  font-size: 17px;
+  margin-top: 4px;
+}
+.aviso-body p {
+  font-size: 14px;
+  color: var(--color-text-soft);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+/* ---------------- BOTTOM NAV (GLASSMORPHISM) ---------------- */
 .bottom-nav {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: var(--cor-barra-inferior);
-    display: flex;
-    justify-content: space-around;
-    padding: 10px 0;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(var(--nav-height) + var(--safe-bottom));
+  padding-bottom: var(--safe-bottom);
+  display: flex;
+  z-index: 30;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 -8px 30px rgba(22, 33, 62, 0.12);
+}
+[data-theme="dark"] .bottom-nav {
+  background: rgba(15, 22, 38, 0.6);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .nav-btn {
-    background: none; border: none; color: #64748b; font-size: 0.9rem; text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--color-text-soft);
+  font-size: 11.5px;
+  font-weight: 600;
+  transition: color 0.2s ease, transform 0.15s ease;
+}
+.nav-btn svg {
+  width: 22px;
+  height: 22px;
+}
+.nav-btn.active {
+  color: var(--color-primary);
+}
+[data-theme="dark"] .nav-btn.active {
+  color: var(--color-accent);
+}
+.nav-btn:active {
+  transform: scale(0.9);
 }
 
-.nav-btn.ativo { color: var(--cor-primaria); font-weight: bold; }
+/* ---------------- UTILITÁRIOS ---------------- */
+.pill-toggle {
+  display: inline-flex;
+  background: var(--color-surface);
+  border-radius: 999px;
+  padding: 4px;
+  box-shadow: var(--shadow-soft);
+  gap: 4px;
+}
+.pill-toggle button {
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-soft);
+}
+.pill-toggle button.active {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.toast {
+  position: fixed;
+  bottom: calc(var(--nav-height) + var(--safe-bottom) + 16px);
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--color-primary-dark);
+  color: #fdfaf3;
+  padding: 12px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 13.5px;
+  box-shadow: var(--shadow-deep);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 50;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Respeita usuários que preferem menos animação */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

@@ -1,62 +1,112 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Hinário Pro</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+  <title>Hinário Digital</title>
+  <meta name="description" content="Hinário digital da igreja — Harpa Cristã, ministérios e avisos, 100% offline." />
+
+  <!-- PWA -->
+  <link rel="manifest" href="./manifest.json" />
+  <meta name="theme-color" content="#16213E" />
+  <link rel="apple-touch-icon" href="/* COLOQUE_O_LINK_DO_SEU_ICONE_180x180_AQUI */" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <!-- Tipografia (cacheada pelo Service Worker após o 1º carregamento) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
-    <!-- Cabeçalho -->
-    <header>
-        <h1 id="titulo-pagina">Hinário</h1>
-    </header>
 
-    <!-- Área Principal de Conteúdo -->
-    <main>
-        <!-- TELA 1: CATEGORIAS DE MÚSICA -->
-        <section id="tela-categorias" class="tela ativa">
-            <div class="grid-ministerios">
-                <!-- Para colocar suas fotos, basta trocar o link no src="" -->
-                <div class="card-ministerio" onclick="abrirMinisterio('senhoras')">
-                    <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500&q=80" alt="Senhoras">
-                    <div class="card-titulo">Senhoras</div>
-                </div>
-                <div class="card-ministerio" onclick="abrirMinisterio('jovens')">
-                    <img src="https://images.unsplash.com/photo-1526485856375-9110812fbf35?w=500&q=80" alt="Jovens">
-                    <div class="card-titulo">Jovens</div>
-                </div>
-                <div class="card-ministerio" onclick="abrirMinisterio('adolescentes')">
-                    <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=500&q=80" alt="Adolescentes">
-                    <div class="card-titulo">Adolescentes</div>
-                </div>
-                <div class="card-ministerio" onclick="abrirMinisterio('criancas')">
-                    <img src="https://images.unsplash.com/photo-1604145559206-e3bce0040e2d?w=500&q=80" alt="Crianças">
-                    <div class="card-titulo">Crianças</div>
-                </div>
-            </div>
-        </section>
+  <!-- ============ CABEÇALHO ============ -->
+  <header class="app-header">
+    <div class="header-row">
+      <div>
+        <div class="eyebrow">Bem-vindo(a)</div>
+        <h1>Hinário Digital</h1>
+      </div>
+      <button id="themeToggle" class="icon-btn" aria-label="Alternar tema"></button>
+    </div>
 
-        <!-- TELA 2: LISTA DE HINOS (Oculta até clicar em um ministério) -->
-        <section id="tela-lista-hinos" class="tela">
-            <button class="btn-voltar" onclick="voltarParaCategorias()">⬅ Voltar</button>
-            <div id="container-hinos"></div>
-        </section>
+    <div class="search-wrap">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="7" /><path d="M21 21l-4.3-4.3" />
+      </svg>
+      <input id="searchInput" type="text" placeholder="Buscar por número, título ou letra..." autocomplete="off" />
+    </div>
+  </header>
 
-        <!-- TELA 3: AVISOS -->
-        <section id="tela-avisos" class="tela">
-            <div id="container-avisos"></div>
-        </section>
-    </main>
+  <!-- ============ TELA: HOME ============ -->
+  <main id="screen-home" class="screen">
+    <div class="section-title">Ministérios</div>
+    <div id="ministryGrid" class="ministry-grid"></div>
+  </main>
 
-    <!-- Barra de Navegação Inferior -->
-    <nav class="bottom-nav">
-        <button onclick="mudarAba('tela-categorias', 'Hinário')" class="nav-btn ativo">🎵<br>Músicas</button>
-        <button onclick="mudarAba('tela-avisos', 'Avisos da Igreja')" class="nav-btn">📢<br>Avisos</button>
-    </nav>
+  <!-- ============ TELA: LISTA DE HINOS ============ -->
+  <main id="screen-lista" class="screen hidden">
+    <div class="header-row" style="margin-bottom: 14px;">
+      <button id="backFromLista" class="icon-btn" aria-label="Voltar" style="background: var(--color-surface); color: var(--color-primary); box-shadow: var(--shadow-soft);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <h2 id="listaTitulo" style="font-size: 20px;">Hinos</h2>
+      <span style="width:40px"></span>
+    </div>
+    <div id="listaHinos" class="hymn-list"></div>
+  </main>
 
-    <script src="dados.js"></script>
-    <script src="app.js"></script>
+  <!-- ============ TELA: FAVORITOS ============ -->
+  <main id="screen-favoritos" class="screen hidden">
+    <h2 style="font-size: 22px; margin-bottom: 14px;">Meus Favoritos</h2>
+    <div id="listaFavoritos" class="hymn-list"></div>
+  </main>
+
+  <!-- ============ TELA: AVISOS ============ -->
+  <main id="screen-avisos" class="screen hidden">
+    <h2 style="font-size: 22px; margin-bottom: 14px;">Avisos da Igreja</h2>
+    <div id="listaAvisos"></div>
+  </main>
+
+  <!-- ============ LEITOR DE HINO (tela cheia) ============ -->
+  <div id="hymnReader" class="hymn-reader">
+    <div class="reader-toolbar">
+      <button id="closeReader" class="icon-btn" aria-label="Fechar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <div class="title">
+        <div id="readerNumero" class="num">Hino</div>
+        <h2 id="readerTitulo">Título</h2>
+      </div>
+      <button id="fontMinus" class="font-btn" aria-label="Diminuir fonte">A-</button>
+      <button id="fontPlus" class="font-btn" aria-label="Aumentar fonte">A+</button>
+      <button id="readerFav" class="icon-btn" aria-label="Favoritar">♡</button>
+    </div>
+    <div id="readerBody" class="reader-body"></div>
+  </div>
+
+  <!-- ============ TOAST ============ -->
+  <div id="toast" class="toast"></div>
+
+  <!-- ============ BOTTOM NAVIGATION (GLASS) ============ -->
+  <nav class="bottom-nav">
+    <button class="nav-btn" data-tab="home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+      Músicas
+    </button>
+    <button class="nav-btn" data-tab="favoritos">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg>
+      Favoritos
+    </button>
+    <button class="nav-btn" data-tab="avisos">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+      Avisos
+    </button>
+  </nav>
+
+  <script src="./dados.js"></script>
+  <script src="./app.js"></script>
 </body>
 </html>

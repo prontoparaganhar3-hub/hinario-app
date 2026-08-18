@@ -1,20 +1,41 @@
 {
-  "name": "App da Igreja",
-  "short_name": "IgrejaApp",
-  "start_url": "index.html",
+  "name": "Hinário Digital - Igreja",
+  "short_name": "Hinário",
+  "description": "Hinário digital da igreja com Harpa Cristã, ministérios e avisos, 100% offline.",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#f4f4f9",
-  "theme_color": "#2c3e50",
+  "orientation": "portrait-primary",
+  "background_color": "#0F1626",
+  "theme_color": "#16213E",
+  "lang": "pt-BR",
+  "categories": ["lifestyle", "music", "religion"],
   "icons": [
     {
-      "src": "icone.png",
+      "src": "/* COLOQUE_O_LINK_DO_SEU_ICONE_192x192_AQUI (ex: icons/icon-192.png) */",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "icone.png",
+      "src": "/* COLOQUE_O_LINK_DO_SEU_ICONE_512x512_AQUI (ex: icons/icon-512.png) */",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/* COLOQUE_O_LINK_DO_SEU_ICONE_MASKABLE_512x512_AQUI (ex: icons/icon-512-maskable.png) */",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/* COLOQUE_O_LINK_DE_UM_PRINT_DO_APP_AQUI (opcional, ex: screenshots/tela1.png) */",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow"
     }
   ]
 }

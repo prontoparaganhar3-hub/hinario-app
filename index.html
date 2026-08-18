@@ -1,29 +1,62 @@
-{
-  "versao": 1,
-  "atualizadoEm": "2026-08-18",
-  "avisos": [
-    {
-      "id": "aviso-exemplo-1",
-      "titulo": "Bem-vindo(a)!",
-      "legenda": "Este é um aviso de exemplo. Vá em Editar > Avisos para adicionar fotos e novidades da sua igreja.",
-      "imagem": "",
-      "tipo": "imagem",
-      "data": "2026-08-18"
-    }
-  ],
-  "ministerios": [
-    { "id": "louvor", "nome": "Louvor" },
-    { "id": "jovens", "nome": "Jovens" },
-    { "id": "kids", "nome": "Kids" },
-    { "id": "coral", "nome": "Coral" }
-  ],
-  "hinos": [
-    {
-      "id": "hino-exemplo-1",
-      "ministerioId": "louvor",
-      "titulo": "Hino de exemplo",
-      "tom": "G",
-      "letra": "G                D\nEste é um exemplo de cifra.\n        Em            C\nEdite ou apague em Editar > Louvores."
-    }
-  ]
-}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Hinário Pro</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <!-- Cabeçalho -->
+    <header>
+        <h1 id="titulo-pagina">Hinário</h1>
+    </header>
+
+    <!-- Área Principal de Conteúdo -->
+    <main>
+        <!-- TELA 1: CATEGORIAS DE MÚSICA -->
+        <section id="tela-categorias" class="tela ativa">
+            <div class="grid-ministerios">
+                <!-- Para colocar suas fotos, basta trocar o link no src="" -->
+                <div class="card-ministerio" onclick="abrirMinisterio('senhoras')">
+                    <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500&q=80" alt="Senhoras">
+                    <div class="card-titulo">Senhoras</div>
+                </div>
+                <div class="card-ministerio" onclick="abrirMinisterio('jovens')">
+                    <img src="https://images.unsplash.com/photo-1526485856375-9110812fbf35?w=500&q=80" alt="Jovens">
+                    <div class="card-titulo">Jovens</div>
+                </div>
+                <div class="card-ministerio" onclick="abrirMinisterio('adolescentes')">
+                    <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=500&q=80" alt="Adolescentes">
+                    <div class="card-titulo">Adolescentes</div>
+                </div>
+                <div class="card-ministerio" onclick="abrirMinisterio('criancas')">
+                    <img src="https://images.unsplash.com/photo-1604145559206-e3bce0040e2d?w=500&q=80" alt="Crianças">
+                    <div class="card-titulo">Crianças</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TELA 2: LISTA DE HINOS (Oculta até clicar em um ministério) -->
+        <section id="tela-lista-hinos" class="tela">
+            <button class="btn-voltar" onclick="voltarParaCategorias()">⬅ Voltar</button>
+            <div id="container-hinos"></div>
+        </section>
+
+        <!-- TELA 3: AVISOS -->
+        <section id="tela-avisos" class="tela">
+            <div id="container-avisos"></div>
+        </section>
+    </main>
+
+    <!-- Barra de Navegação Inferior -->
+    <nav class="bottom-nav">
+        <button onclick="mudarAba('tela-categorias', 'Hinário')" class="nav-btn ativo">🎵<br>Músicas</button>
+        <button onclick="mudarAba('tela-avisos', 'Avisos da Igreja')" class="nav-btn">📢<br>Avisos</button>
+    </nav>
+
+    <script src="dados.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

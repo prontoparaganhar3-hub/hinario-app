@@ -286,6 +286,8 @@ button {
 }
 /* Favoritos: fica sem imagem, só o gradiente, como você pediu */
 .ministry-card.favoritos { background-image: linear-gradient(160deg, #b0473f, #5c1f1a); }
+/* FHOP Music: card novo, ainda sem logo enviada — cor própria, diferente da Harpa */
+.ministry-card.fhop { background-image: linear-gradient(160deg, #4a2f7d, #241448); }
 
 /* ---------------- LISTA DE HINOS ---------------- */
 .hymn-list {
@@ -571,3 +573,7 @@ button {
     transition: none !important;
   }
 }
+
+
+
+

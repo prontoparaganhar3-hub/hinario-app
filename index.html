@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
-  <title>Hinário e avisos Digital</title>
+  <title>Hinário Digital</title>
   <meta name="description" content="Hinário digital da igreja — Harpa Cristã, ministérios e avisos, 100% offline." />
 
   <!-- PWA -->
@@ -36,7 +36,7 @@
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <circle cx="11" cy="11" r="7" /><path d="M21 21l-4.3-4.3" />
       </svg>
-      <input id="searchInput" type="text" placeholder="Buscar por número, título ou letra..." autocomplete="off" />
+      <input id="searchInput" type="text" placeholder="Buscar em todos os ministérios..." autocomplete="off" />
     </div>
   </header>
 
@@ -106,14 +106,7 @@
     </button>
   </nav>
 
-  <!-- 1º: Carrega a Harpa -->
-  <script src="./harpa.js"></script>
-
-  <!-- 2º: Carrega os Dados -->
   <script src="./dados.js"></script>
-
-  <!-- 3º: Carrega a Lógica Principal do App -->
   <script src="./app.js"></script>
-
 </body>
 </html>

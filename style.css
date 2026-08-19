@@ -244,13 +244,48 @@ button {
   opacity: 0.85;
 }
 
-/* Placeholder de imagem: onde você troca a foto de cada card */
-.ministry-card.harpa      { background-image: url("/* COLOQUE_O_LINK_DA_IMAGEM_HARPA_CRISTA_AQUI */"), linear-gradient(160deg, #2a3a63, #16213e); }
-.ministry-card.senhoras   { background-image: url("/* COLOQUE_O_LINK_DA_IMAGEM_SENHORAS_AQUI */"), linear-gradient(160deg, #6d3b5c, #3a2038); }
-.ministry-card.jovens     { background-image: url("/* COLOQUE_O_LINK_DA_IMAGEM_JOVENS_AQUI */"), linear-gradient(160deg, #1f6e5c, #123a30); }
-.ministry-card.adolescentes { background-image: url("/* COLOQUE_O_LINK_DA_IMAGEM_ADOLESCENTES_AQUI */"), linear-gradient(160deg, #a06a1d, #5c3c10); }
-.ministry-card.criancas   { background-image: url("/* COLOQUE_O_LINK_DA_IMAGEM_CRIANCAS_AQUI */"), linear-gradient(160deg, #2f7dab, #163a52); }
-.ministry-card.favoritos  { background-image: url("/* COLOQUE_O_LINK_DA_IMAGEM_FAVORITOS_AQUI (opcional) */"), linear-gradient(160deg, #b0473f, #5c1f1a); }
+/* ---- Imagens dos cards ----
+   Cards com logo (.has-logo): a logo entra como SELO centralizado
+   (background-size menor, sem esticar) por cima do gradiente da marca —
+   já que as logos enviadas são marcas com fundo transparente, não fotos.
+   Se um dia você trocar por uma FOTO cheia, troque o background-size
+   desse card para "cover, cover" que ela preenche o card todo. */
+.ministry-card.has-logo::before {
+  background: linear-gradient(180deg, rgba(0,0,0,0.05) 35%, rgba(0,0,0,0.72) 100%);
+}
+
+.ministry-card.harpa {
+  background-image: url("./img/harpa-logo.png"), linear-gradient(160deg, #2a3a63, #16213e);
+  background-size: 58% auto, cover;
+  background-repeat: no-repeat, no-repeat;
+  background-position: center 34%, center;
+}
+.ministry-card.senhoras {
+  background-image: url("./img/senhoras-logo.png"), linear-gradient(160deg, #6d3b5c, #3a2038);
+  background-size: 58% auto, cover;
+  background-repeat: no-repeat, no-repeat;
+  background-position: center 34%, center;
+}
+.ministry-card.jovens {
+  background-image: url("./img/jovens-adolescentes-logo.png"), linear-gradient(160deg, #1f6e5c, #123a30);
+  background-size: 58% auto, cover;
+  background-repeat: no-repeat, no-repeat;
+  background-position: center 34%, center;
+}
+.ministry-card.adolescentes {
+  background-image: url("./img/jovens-adolescentes-logo.png"), linear-gradient(160deg, #a06a1d, #5c3c10);
+  background-size: 58% auto, cover;
+  background-repeat: no-repeat, no-repeat;
+  background-position: center 34%, center;
+}
+.ministry-card.criancas {
+  background-image: url("./img/criancas-logo.png"), linear-gradient(160deg, #2f7dab, #163a52);
+  background-size: 58% auto, cover;
+  background-repeat: no-repeat, no-repeat;
+  background-position: center 34%, center;
+}
+/* Favoritos: fica sem imagem, só o gradiente, como você pediu */
+.ministry-card.favoritos { background-image: linear-gradient(160deg, #b0473f, #5c1f1a); }
 
 /* ---------------- LISTA DE HINOS ---------------- */
 .hymn-list {

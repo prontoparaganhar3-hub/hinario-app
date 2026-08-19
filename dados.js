@@ -89,12 +89,14 @@ const cantCriancas = gerarEsqueletoMinisterio("criancas", 6);
 
 // ---------- 4. METADADOS DOS MINISTÉRIOS (cards da Home) ----------
 const ministerios = [
-  { id: "harpa", nome: "Harpa Cristã", icone: "🎼", classe: "harpa" },
-  { id: "senhoras", nome: "Senhoras", icone: "🌷", classe: "senhoras" },
-  { id: "jovens", nome: "Jovens", icone: "🔥", classe: "jovens" },
-  { id: "adolescentes", nome: "Adolescentes", icone: "⭐", classe: "adolescentes" },
-  { id: "criancas", nome: "Crianças", icone: "🎈", classe: "criancas" },
-  { id: "favoritos", nome: "Favoritos", icone: "❤️", classe: "favoritos" }
+  { id: "harpa", nome: "Harpa Cristã", icone: "🎼", classe: "harpa", temLogo: true },
+  { id: "senhoras", nome: "Senhoras", icone: "🌷", classe: "senhoras", temLogo: true },
+  { id: "jovens", nome: "Jovens", icone: "🔥", classe: "jovens", temLogo: true },
+  { id: "adolescentes", nome: "Adolescentes", icone: "⭐", classe: "adolescentes", temLogo: true },
+  { id: "criancas", nome: "Crianças", icone: "🎈", classe: "criancas", temLogo: true },
+  { id: "favoritos", nome: "Favoritos", icone: "❤️", classe: "favoritos", temLogo: false }
+  /* "Casais" ainda não entrou aqui — a imagem casais-logo-NAO-USADO-AINDA.png
+     já está na pasta /img, só falta confirmar se este card deve existir. */
 ];
 
 // ---------- 5. AVISOS DA IGREJA ----------

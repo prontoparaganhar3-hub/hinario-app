@@ -74,6 +74,8 @@
     state.currentTab = tab;
     state.currentCategoria = categoria || null;
     state.searchTerm = "";
+    $("#searchInput").value = "";
+    telaAntesDaBusca = null;
 
     $$(".screen").forEach((s) => s.classList.add("hidden"));
     $$(".nav-btn").forEach((b) => b.classList.remove("active"));
@@ -106,8 +108,9 @@
           m.id === "favoritos"
             ? state.favoritos.length
             : (BASE_DE_DADOS.hinos[m.id] || []).length;
+        const logoClass = m.temLogo ? "has-logo" : "";
         return `
-          <button class="ministry-card ${m.classe}" data-ministerio="${m.id}">
+          <button class="ministry-card ${m.classe} ${logoClass}" data-ministerio="${m.id}">
             <span class="m-icon">${m.icone}</span>
             <span class="m-name">${m.nome}</span>
             <span class="m-count">${qtd} ${qtd === 1 ? "hino" : "hinos"}</span>
@@ -165,7 +168,7 @@
   function hymnRowHTML(h, categoria) {
     const fav = isFavorito(categoria, h.numero);
     return `
-      <div class="hymn-row" data-numero="${h.numero}">
+      <div class="hymn-row" data-numero="${h.numero}" data-categoria="${categoria}">
         <div class="hymn-number">${h.numero}</div>
         <div class="hymn-info">
           <div class="t">${escapeHtml(h.titulo)}</div>
@@ -205,6 +208,50 @@
     });
   }
 
+  // ---------- BUSCA GLOBAL (todos os ministérios de uma vez) ----------
+  // Não filtra "favoritos" (não é um cancioneiro) nem duplica hinos.
+  function buscarEmTodosMinisterios(termo) {
+    const termoLower = termo.trim().toLowerCase();
+    const resultados = [];
+    Object.keys(BASE_DE_DADOS.hinos).forEach((categoria) => {
+      BASE_DE_DADOS.hinos[categoria].forEach((h) => {
+        const noNumero = String(h.numero).includes(termoLower);
+        const noTitulo = h.titulo.toLowerCase().includes(termoLower);
+        const naLetra = h.letra.join(" ").toLowerCase().includes(termoLower);
+        if (noNumero || noTitulo || naLetra) {
+          resultados.push({ hino: h, categoria });
+        }
+      });
+    });
+    return resultados;
+  }
+
+  function renderBuscaGlobal(termo) {
+    // Reaproveita a tela de lista, mas mostrando resultados de TODOS os ministérios
+    $$(".screen").forEach((s) => s.classList.add("hidden"));
+    $$(".nav-btn").forEach((b) => b.classList.remove("active"));
+    $("#screen-lista").classList.remove("hidden");
+
+    const resultados = buscarEmTodosMinisterios(termo);
+    $("#listaTitulo").textContent = `Busca: "${termo}"`;
+
+    const container = $("#listaHinos");
+    if (resultados.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="big">🔍</div>
+          <p>Nenhum hino encontrado em nenhum ministério para "${escapeHtml(termo)}".</p>
+        </div>`;
+      return;
+    }
+
+    container.innerHTML = resultados
+      .map(({ hino, categoria }) => hymnRowHTML(hino, categoria))
+      .join("");
+
+    bindHymnRowEvents(container, null);
+  }
+
   // ---------- RENDER: FAVORITOS ----------
   function renderFavoritos() {
     const container = $("#listaFavoritos");
@@ -222,9 +269,7 @@
         const [categoria] = key.split(":");
         const hino = buscarHinoPorChave(key);
         if (!hino) return "";
-        const row = hymnRowHTML(hino, categoria);
-        // injeta a categoria no elemento para o clique funcionar corretamente
-        return row.replace('class="hymn-row"', `class="hymn-row" data-categoria="${categoria}"`);
+        return hymnRowHTML(hino, categoria);
       })
       .join("");
 
@@ -307,12 +352,34 @@
   }
 
   // ---------- BUSCA ----------
+  // A barra de busca do cabeçalho funciona em QUALQUER tela: digitou,
+  // pesquisa em todos os ministérios ao mesmo tempo (Harpa, Senhoras,
+  // Jovens, Adolescentes, Crianças), sem precisar abrir um específico.
   let searchDebounce = null;
+  let telaAntesDaBusca = null; // pra voltar pro lugar certo ao apagar a busca
+
   function onSearchInput(value) {
     state.searchTerm = value;
     clearTimeout(searchDebounce);
     searchDebounce = setTimeout(() => {
-      if (state.currentTab === "lista") renderLista();
+      const termo = value.trim();
+
+      if (termo.length === 0) {
+        // Campo de busca vazio: volta pra onde o usuário estava
+        if (telaAntesDaBusca) {
+          goToTab(telaAntesDaBusca.tab, telaAntesDaBusca.categoria);
+          telaAntesDaBusca = null;
+        }
+        return;
+      }
+
+      // Guarda onde o usuário estava ANTES de começar a digitar,
+      // só na primeira letra da busca
+      if (!telaAntesDaBusca) {
+        telaAntesDaBusca = { tab: state.currentTab, categoria: state.currentCategoria };
+      }
+
+      renderBuscaGlobal(termo);
     }, 60); // debounce curto: filtragem em tempo real, sem travar
   }
 

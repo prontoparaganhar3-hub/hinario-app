@@ -6,7 +6,7 @@
    o celular dos usuários a baixar a versão nova.
    ============================================================ */
 
-const CACHE_VERSION = "hinario-v1";
+const CACHE_VERSION = "hinario-v2"; // v2: adicionadas as imagens dos ministérios
 
 // Arquivos essenciais para o app abrir sem internet.
 // Se você adicionar imagens locais (ex: icons/icon-192.png),
@@ -17,8 +17,12 @@ const APP_SHELL = [
   "./style.css",
   "./app.js",
   "./dados.js",
-  "./manifest.json"
-  /* ADICIONE_AQUI_OS_CAMINHOS_DE_IMAGENS_LOCAIS_SE_TIVER (ex: "./icons/icon-192.png") */
+  "./manifest.json",
+  "./img/harpa-logo.png",
+  "./img/senhoras-logo.png",
+  "./img/jovens-adolescentes-logo.png",
+  "./img/criancas-logo.png"
+  /* ADICIONE_AQUI_OUTROS_CAMINHOS_DE_IMAGENS_LOCAIS_SE_TIVER (ex: "./icons/icon-192.png") */
 ];
 
 // ---------- INSTALAÇÃO: baixa e guarda o "esqueleto" do app ----------
